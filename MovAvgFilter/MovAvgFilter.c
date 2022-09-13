@@ -30,23 +30,9 @@ void insertIntoRawArray(uint16_t value)
 
 int main()
 {
-	insertIntoRawArray(1);
-	insertIntoRawArray(2);
-	insertIntoRawArray(3);
-	insertIntoRawArray(4);
-	insertIntoRawArray(5);
-	insertIntoRawArray(6);
-	printf("%f\r\n", MovAvgFilter());
-
-	insertIntoRawArray(7);
-	printf("%f\r\n", MovAvgFilter());
-
-	insertIntoRawArray(8);
-	printf("%f\r\n", MovAvgFilter());
-
-	insertIntoRawArray(9);
-	printf("%f\r\n", MovAvgFilter());
-
-	insertIntoRawArray(10);
-	printf("%f\r\n", MovAvgFilter());
+	for(int i =0; i<10; i++)
+	{
+	   insertIntoRawArray(rand()%9);
+	   printf("%f\r\n", MovAvgFilter());
+	}
 }
