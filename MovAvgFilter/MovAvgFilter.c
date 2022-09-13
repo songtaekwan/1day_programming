@@ -6,7 +6,7 @@
 uint16_t raw_array[MASK_LENGTH] = {0,};
 uint16_t raw_array_index = 0;
 
-float movingAverageFilter()
+float MovAvgFilter()
 {
     int i = 0;
     uint16_t sum = 0;
@@ -36,17 +36,17 @@ int main()
 	insertIntoRawArray(4);
 	insertIntoRawArray(5);
 	insertIntoRawArray(6);
-	printf("%f\r\n", movingAverageFilter());
+	printf("%f\r\n", MovAvgFilter());
 
 	insertIntoRawArray(7);
-	printf("%f\r\n", movingAverageFilter());
+	printf("%f\r\n", MovAvgFilter());
 
 	insertIntoRawArray(8);
-	printf("%f\r\n", movingAverageFilter());
+	printf("%f\r\n", MovAvgFilter());
 
 	insertIntoRawArray(9);
-	printf("%f\r\n", movingAverageFilter());
+	printf("%f\r\n", MovAvgFilter());
 
 	insertIntoRawArray(10);
-	printf("%f\r\n", movingAverageFilter());
+	printf("%f\r\n", MovAvgFilter());
 }
