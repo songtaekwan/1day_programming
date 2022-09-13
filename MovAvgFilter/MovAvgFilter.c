@@ -1,29 +1,40 @@
 #include <stdio.h>
-#include <stdint.h>
+#include <stdlib.h>
 
-#define MASK_LENGTH 5
+#define MASK_LENGTH 10
 
-uint16_t raw_array[MASK_LENGTH] = {0,};
-uint16_t raw_array_index = 0;
+int raw_array[MASK_LENGTH] = {0,};
+int raw_array_index = 0;
+int cnt = 1;
 
 float MovAvgFilter()
 {
     int i = 0;
-    uint16_t sum = 0;
-
-    for (i = 0; i < MASK_LENGTH; i++) {
+    int sum = 0;
+    float pre_avg = 0;
+	float avg = 0;
+	
+    for (i = 0; i < cnt ; i++) 
+	{
     	sum += raw_array[i];
     }
-    return ((float)sum / MASK_LENGTH);
+	
+	pre_avg = (float)sum / cnt;
+	avg = pre_avg + (raw_array[cnt]/cnt) - (raw_array[0]/cnt);	
+	
+	pre_avg = avg;
+	
+    return avg;
 }
 
-void insertIntoRawArray(uint16_t value)
+void insertIntoRawArray(int value)
 {
     raw_array[raw_array_index] = value;
 
     raw_array_index++;
 
-    if (raw_array_index >= MASK_LENGTH) {
+    if (raw_array_index >= MASK_LENGTH) 
+	{
     	raw_array_index = 0;
     }
 }
@@ -34,5 +45,6 @@ int main()
 	{
 	   insertIntoRawArray(rand()%9);
 	   printf("%f\r\n", MovAvgFilter());
+	   cnt++;
 	}
 }
