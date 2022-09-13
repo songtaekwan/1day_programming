@@ -14,13 +14,14 @@ float MovAvgFilter()
     float pre_avg = 0;
 	float avg = 0;
 	
-    for (i = 0; i < cnt ; i++) 
+    for (i = 0; i < raw_array_index ; i++) 
 	{
     	sum += raw_array[i];
+		printf("sum: %d\n",sum);
     }
 	
-	pre_avg = (float)sum / cnt;
-	avg = pre_avg + (raw_array[cnt]/cnt) - (raw_array[0]/cnt);	
+	pre_avg = (float)sum / raw_array_index;
+	avg = pre_avg + (raw_array[raw_array_index]/MASK_LENGTH) - (raw_array[raw_array_index - MASK_LENGTH]/MASK_LENGTH);	
 	
 	pre_avg = avg;
 	
@@ -41,10 +42,12 @@ void insertIntoRawArray(int value)
 
 int main()
 {
-	for(int i =0; i<10; i++)
+	int x;
+	while(1)
 	{
-	   insertIntoRawArray(rand()%9);
-	   printf("%f\r\n", MovAvgFilter());
-	   cnt++;
+	   printf("데이터 입력: ",x);
+	   scanf("%d",&x);
+	   insertIntoRawArray(x);
+	   printf("avg : %f\r\n", MovAvgFilter());
 	}
 }
