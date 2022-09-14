@@ -13,14 +13,14 @@ float MovAvgFilter()
     float pre_avg = 0;
 	float avg = 0;
 	
-    for (i = 0; i < raw_array_index ; i++) 
+    for (i = 0; i < MASK_LENGTH ; i++) 
 	{
     	sum += raw_array[i];
-		printf("sum: %d\n",sum);
+        printf("sum: %d\n",sum);
     }
 	
-	pre_avg = (float)sum / (raw_array_index+1);
-	avg = pre_avg + (raw_array[raw_array_index]/MASK_LENGTH) - (raw_array[raw_array_index - MASK_LENGTH]/MASK_LENGTH);	
+	pre_avg = (float)sum / MASK_LENGTH;
+	avg = pre_avg + (raw_array[raw_array_index]/MASK_LENGTH) - (raw_array[0]/MASK_LENGTH);	
 	
 	pre_avg = avg;
 	
