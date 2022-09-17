@@ -8,7 +8,7 @@ float avg = 0;
 float avg_cal;
 float alpha;
 
-float MovAvgFilter(int x)
+float MovAvgFilter(int x, float alpha)
 {
     sum = sum + x;
 	cnt++;
@@ -17,10 +17,6 @@ float MovAvgFilter(int x)
 	avg_cal = (float)sum / cnt;
     printf("avg_cal: %f\n",avg_cal);
 
-	alpha = (cnt - 1) / cnt;
-	
-	printf("alpha: %f\n",alpha);
-	
 	avg = alpha * pre_avg + (1 - alpha) * x;
 	pre_avg = avg;
 	
@@ -30,10 +26,12 @@ float MovAvgFilter(int x)
 int main()
 {
 	int x;
+	printf("alpha(0< <1): ");
+	scanf("%f",&alpha);
 	while(1)
 	{
 	   printf("데이터 입력: ");
 	   scanf("%d",&x);
-	   printf("avg : %f\r\n", MovAvgFilter(x));
+	   printf("avg : %f\r\n", MovAvgFilter(x, alpha));
 	}
 }
