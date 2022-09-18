@@ -7,7 +7,6 @@ float fa(float b, float k, float m, float v, float x)
 	float a;
 	
 	a = -(b*v + k*x) / m;
-	printf("a: %f\n",a);
 	return a;
 }
 float frk(float b, float k, float m)
