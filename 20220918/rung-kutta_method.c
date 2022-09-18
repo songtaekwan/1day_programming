@@ -35,8 +35,8 @@ float frk(float b, float k, float m)
 	    x4=(v[i]+v3)*dt;
 			  
 		t[i+1] = t[i] + dt;
-		v[i+1] = v[i] + (0.16666666666*(v1+ 2*v2 + 2*v3 + v4));
-	    x[i+1] = x[i] + (0.16666666666*(x1+ 2*x2 + 2*x3 + x4));
+		v[i+1] = v[i] + ((1.0/6.0)*(v1+ 2*v2 + 2*v3 + v4));
+	    x[i+1] = x[i] + ((1.0/6.0)*(x1+ 2*x2 + 2*x3 + x4));
 		
 		printf("t%d: %f\n",i, t[i]);
 		printf("v%d: %f\n",i, v[i]);
