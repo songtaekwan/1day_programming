@@ -26,39 +26,22 @@ float frk(float b, float k, float m)
 		x1=v[i]*dt;
 		
 		v2=fa(b,k,m,v[i]+(v1/2),x[i]+(x1/2))*dt;
-	    x2=(v[i]+(v1/2))*dt;
+	        x2=(v[i]+(v1/2))*dt;
 			  
 		v3=fa(b,k,m,v[i]+(v2/2),x[i]+(x2/2))*dt;
-	    x3=(v[i]+(v2/2))*dt;
+	        x3=(v[i]+(v2/2))*dt;
 			  
 		v4=fa(b,k,m,v[i]+v3,x[i]+x3)*dt;
-	    x4=(v[i]+v3)*dt;
+	        x4=(v[i]+v3)*dt;
 			  
 		t[i+1] = t[i] + dt;
 		v[i+1] = v[i] + ((1.0/6.0)*(v1+ 2*v2 + 2*v3 + v4));
-	    x[i+1] = x[i] + ((1.0/6.0)*(x1+ 2*x2 + 2*x3 + x4));
+	        x[i+1] = x[i] + ((1.0/6.0)*(x1+ 2*x2 + 2*x3 + x4));
 		
 		printf("t%d: %f\n",i, t[i]);
 		printf("v%d: %f\n",i, v[i]);
 		printf("x%d: %f\n\n\n",i, x[i]);
 	}
-	/*
-	printf("시간\n");
-	for(int i=0; i<len; i++)
-	{
-		printf("%f\n", t[i]);
-	}
-	printf("속도\n");
-	for(int i=0; i<len; i++)
-	{
-		printf("%f\n", v[i]);
-	}
-	printf("변위\n");
-	for(int i=0; i<len; i++)
-	{
-		printf("%f\n", x[i]);
-	}
-	*/
 } 
 
 int main ()
