@@ -74,7 +74,5 @@ int main ()
 	printf("m입력: ");
 	scanf("%f",&m);
 
-	frk(b,k,m);
-	
-	return 0;
+	frk(b,k,m);	
 }
