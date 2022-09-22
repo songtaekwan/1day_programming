@@ -10,13 +10,6 @@ float alpha;
 
 float MovAvgFilter(int x, float alpha)
 {
-    sum = sum + x;
-	cnt++;
-    printf("sum: %d, cnt: %f\n",sum, cnt);
-
-	avg_cal = (float)sum / cnt;
-    printf("avg_cal: %f\n",avg_cal);
-
 	avg = alpha * pre_avg + (1 - alpha) * x;
 	pre_avg = avg;
 	
