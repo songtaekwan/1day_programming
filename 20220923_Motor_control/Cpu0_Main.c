@@ -6,12 +6,10 @@
 #include "Motor_control_pwm.h"
 #include "GPT12_PWM_Generation.h"
 
-/*********************************************************************************************************************/
-/*------------------------------------------------------Macros-------------------------------------------------------*/
-/*********************************************************************************************************************/
-#define WAIT_TIME   1000             /* Number of milliseconds to wait between each conversion                       */
+#define WAIT_TIME   1000            
 
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
+/*--------pwm control---------*/
 int adc_value;
 int pre_val = 0;
 int val = 0;
