@@ -1,353 +1,337 @@
 #include <stdio.h>
-#include <stdlib.h> // malloc
- 
-static double
-Determinant(double** matrixA, int uesrN);
- 
-static int
-InverseMatrix(double** matrixA, double** inversedMatrixA, int userN,
-                double determinantResult);
- 
-static int
-MultiplicationMatrix(double** matrixA, double** matrixB, double** resultMatrix,
-                        int userN);
-int
-main(void)
+
+float twobytwo_invers(float a2[][2]);
+float twobytwo_input_print(float a[][2], int size);
+float threebythree_invers(float a3[][3]);
+float threebythree_input_print(float a[][3], int size);
+float fourbyfour_invers(float a4[][4]);
+float fourbyfour_input_print(float a[][4], int size);
+
+float data = 0.0f;
+
+float invers_A2[2][2] = { 0, };
+float A2[2][2] = { 0, };
+float invers_A3[3][3] = { 0, };
+float A3[3][3] = { 0, };
+float invers_A4[4][4] = { 0, };
+float A4[4][4] = { 0, };
+
+int main(void)
 {
-    int userN = 0;
-    int userM = 0;
-    int row = 0;
-    int column = 0;
- 
-    double** matrixA;
-    double** inversedMatrixA;
-    double** multiplicationalMatrixA;
-    double determinantResult = 0;
- 
-    printf("n by n = ");
-    scanf("%d", &userN);
- 
-    userM = userN - 1;
- 
-    matrixA = (double**)malloc(sizeof(double*) * userN);
-    for (row = 0; row < userN; row++)
-    {
-        matrixA[row] = (double*)malloc(sizeof(double) * userN);
-    } /* for (row = 0; row < userN; row++) */
- 
-    for (row = 0; row < userN; row++)
-    {
-        for (column = 0; column < userN; column++)
-        {
-            printf("%d , %d =", row, column);
-            scanf("%lf", &matrixA[row][column]);
-        } /* for (column = 0; column < userN; column++) */
-    } /* for (row = 0; row < userN; row++) */
-    printf("\nA =\n");
- 
-    for (row = 0; row < userN; row++)
-    {
-        for (column = 0; column < userN; column++)
-        {
-            printf("%10.5lf ", matrixA[row][column]);
-            if(column % userN == userM)
-            {
-                printf("\n");
-            } /* if(column % userN == userM) */
-        } /* for (column = 0; column < userN; column++) */
-    } /* for (row = 0; row < userN; row++) */
- 
-    determinantResult = Determinant(matrixA, userN);
-    printf("\n|A| = %.5g\n", determinantResult);
- 
-    if (!determinantResult)
-    {
-        printf("\nNo determinant(A)\n");
-    } /* if (!determinantResult) */
-    else
-    {
-        inversedMatrixA = (double**)malloc(sizeof(double*) * userN);
-        multiplicationalMatrixA = (double**)malloc(sizeof(double*) * userN);
- 
-        for (row = 0; row < userN; row++)
-        {
-            inversedMatrixA[row] = (double*)malloc(sizeof(double) * userN);
-            multiplicationalMatrixA[row] =
-                                        (double*)malloc(sizeof(double) * userN);
-        } /* for (row = 0; row < userN; row++) */
- 
-        InverseMatrix(matrixA, inversedMatrixA, userN, determinantResult);
- 
-        printf("\nA' = \n");
-        for (row = 0; row < userN; row++)
-        {
-            for (column = 0; column < userN; column++)
-            {
-                printf("%15.5lf ", inversedMatrixA[row][column]);
-                if (column % userN == userM)
-                {
-                    printf("\n");
-                } /* if (column % userN == userM) */
-            } /* for (column = 0; column < userN; column++) */
-        } /* for (row = 0; row < userN; row++) */
- 
-        MultiplicationMatrix(matrixA, inversedMatrixA,
-                                multiplicationalMatrixA, userN);
- 
-        printf("\nA'A = \n");
-        for (row = 0; row < userN; row++)
-        {
-            for (column = 0; column < userN; column++)
-            {
-                printf("%15.5lf ", multiplicationalMatrixA[row][column]);
-                if (column % userN == userM)
-                {
-                    printf("\n");
-                } /* if (column % userN == userM) */
-            } /* for (column = 0; column < userN; column++) */
-        } /* for (row = 0; row < userN; row++) */
- 
-        for(row = 0; row < userN; row++)
-        {
-            free(multiplicationalMatrixA[row]);
-            free(inversedMatrixA[row]);
-        } /* for(row = 0; row < userN; row++) */
- 
-        free(multiplicationalMatrixA);
-        free(inversedMatrixA);
-    }
- 
-    for(row = 0; row < userN; row++)
-    {
-        free(matrixA[row]);
-    } /* for(row = 0; row < userN; row++) */
-    free(matrixA);
- 
-    return 0;
+	int size;
+
+	printf("행렬 크기를 입력해주세요: ");
+	scanf("%d", &size);
+
+	if (size == 2)
+	{
+		twobytwo_input_print(A2, size);
+		twobytwo_invers(A2);
+	}
+	else if (size == 3)
+	{
+		threebythree_input_print(A3, size);
+		threebythree_invers(A3);
+	}
+	else if (size == 4)
+	{
+		fourbyfour_input_print(A4, size);
+		fourbyfour_invers(A4);
+	}
+
+	return 0;
 }
- 
-/**
- * Function Name: Determinant
- *
- * Function Description:
- *        This function solve the determinant from a matrix A
- *
- * Input: matrixA , userN
- * Output: determinantResult
- * Version: 1.0
- */
-static double
-Determinant (double** matrixA, int userN)
+float twobytwo_input_print(float a[][2], int size)
 {
-    int userM = 0;
-    int counter = 0;
-    int determinantACheck = 0;
-    int determinantARow = 0;
-    int determinantAColumn = 0;
-    int sign = 1;
- 
-    double determinantResult = 0;
-    double** matrixDeterminantA;
- 
-    userM = userN-1;
- 
-    matrixDeterminantA = (double**)malloc(sizeof(double*) * userM);
-    for (counter = 0; counter < userM; counter++)
-    {
-        matrixDeterminantA[counter] = (double*)malloc(sizeof(double) * userM);
-    } /* for (counter = 0; counter < userM; counter++) */
- 
-    if (userN == 2)
-    {
-        determinantResult = (matrixA[0][0] * matrixA[1][1]) -
-                                (matrixA[0][1] * matrixA[1][0]);
-    } /* if (userN == 2) */
- 
-    else
-    {
-        for (counter = 0; counter < userN; counter++)
-        {
-            for (determinantARow = 0; determinantARow < userM;
-                    determinantARow++)
-            {
-                determinantACheck = 0;
-                for (determinantAColumn = 0; determinantAColumn < userM;
-                        determinantAColumn++)
-                {
-                    if (determinantAColumn == counter)
-                    {
-                        determinantACheck++;
-                    } /* if (determinantAColumn == counter) */
-                    matrixDeterminantA[determinantARow][determinantAColumn] =
-                            matrixA[determinantARow + 1][determinantACheck];
-                    determinantACheck++;
-                } /* for (determinantAColumn = 0; determinantAColumn < userM;
-                        determinantAColumn++) */
-            } /* for (determinantARow = 0; determinantARow < userM;
-                    determinantARow++) */
- 
-            if(counter % 2 == 1)
-            {
-                sign = -1;
-            } /* if(counter % 2 == 1) */
-            else
-            {
-                sign = 1;
-            } /* else */
- 
-            determinantResult += sign * matrixA[0][counter] *
-                                    Determinant(matrixDeterminantA,userM);
-        } /* for (counter = 0; counter < userN; counter++) */
-    } /* else */
- 
- 
-    for(counter = 0; counter < userM; counter++)
-    {
-        free(matrixDeterminantA[counter]);
-    } /* for(counter = 0; counter < userM; counter++) */
-    free(matrixDeterminantA);
- 
-    return determinantResult;
+	printf("2X2 행렬 입력\n");
+
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size; j++)
+		{
+			printf("[%d][%d] 입력 \n", i, j);
+			scanf("%f", &data);
+			A2[i][j] = data;
+		}
+
+	printf("A행렬 출력\n");
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			printf("%5f", A2[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
 }
 
-static int
-InverseMatrix(double** matrixA, double** inversedMatrixA, int userN,
-                double determinantResult)
+float threebythree_input_print(float a[][3], int size)
 {
-    int userM = 0;
-    int row = 0;
-    int column = 0;
-    int cofactorRowCheck=0;
-    int cofactorColumnCheck=0;
-    int cofactorRow=0;
-    int cofactorColumn=0;
-    int sign = 1;
- 
-    double temporaryValue = 0;
-    double** determinantCofactorMatrixA;
-    double** cofactorMatrixA;
- 
-    userM = userN - 1;
- 
-    cofactorMatrixA = (double**)malloc(sizeof(double*) * userN);
-    for(row = 0; row < userN; row++)
-    {
-        cofactorMatrixA[row] = (double*)malloc(sizeof(double) * userN);
-    } /* for(row = 0; row < userN; row++) */
- 
-    determinantCofactorMatrixA = (double**)malloc(sizeof(double*) * userM);
-    for(row = 0; row < userM; row++)
-    {
-        determinantCofactorMatrixA[row] =
-                (double*)malloc(sizeof(double) * userM);
-    } /* for(row = 0; row < userM; row++) */
- 
-    /* Find the Cofactor */
- 
-    if (userN == 2)
-    {
-        cofactorMatrixA[0][0] = (matrixA[0][0] * matrixA[1][1]) -
-                                (matrixA[0][1] * matrixA[1][0]);
-    } /* if (userN == 2) */
-    else
-    {
-        for (row = 0; row < userN; row++)
-        {
-            for (column = 0; column < userN; column++)
-            {
-                cofactorColumnCheck=0;
-                for (cofactorRow = 0; cofactorRow < userM; cofactorRow++)
-                {
-                    if(cofactorColumnCheck == column)
-                    {
-                        cofactorColumnCheck++;
-                    } /* if(cofactorColumnCheck == column) */
-                    cofactorRowCheck=0;
-                    for (cofactorColumn = 0; cofactorColumn < userM;
-                            cofactorColumn++)
-                    {
-                        if (cofactorColumn == row)
-                        {
-                            cofactorRowCheck++;
-                        } /* if (cofactorColumn == row) */
-                        determinantCofactorMatrixA[cofactorRow]
-                            [cofactorColumn] =
-                            matrixA[cofactorColumnCheck][cofactorRowCheck];
-                        cofactorRowCheck++;
-                    } /* for (cofactorColumn = 0; cofactorColumn < userM;
-                            cofactorColumn++) */
-                    cofactorColumnCheck++;
-                } /* for (cofactorRow = 0; cofactorRow < userM;
-                            cofactorRow++) */
-                if( (row+column) % 2 == 1)
-                {
-                    sign = -1;
-                } /* if( (row+column) % 2 == 1) */
-                else
-                {
-                    sign = 1;
-                } /* else */
-                cofactorMatrixA[row][column] = sign *
-                        Determinant(determinantCofactorMatrixA, userM);
-            } /* for (column = 0; column < userN; column++) */
-        } /* for (row = 0; row < userN; row++) */
-    } /* else */
- 
- 
-    for(row = 0; row < userM; row++)
-    {
-        free(determinantCofactorMatrixA[row]);
-    } /* for(row = 0; row < userM; row++) */
-    free(determinantCofactorMatrixA);
- 
-    // adjoint
-    for (row = 0; row < userN; row++)
-    {
-        for (column = 0; column < userN; column++)
-        {
-            temporaryValue = cofactorMatrixA[row][column];
-            inversedMatrixA[row][column] = cofactorMatrixA[column][row];
-            inversedMatrixA[column][row] = temporaryValue;
-        } /* for (column = 0; column < userN; column++) */
-    } /* for (row = 0; row < userN; row++) */
- 
-    // adjoint / determinant = inverse
-    for (row = 0; row < userN;row++)
-    {
-        for (column = 0; column < userN; column++)
-        {
-            inversedMatrixA[row][column] =
-                            cofactorMatrixA[row][column] / determinantResult;
-        } 
-    } 
- 
-    for(row = 0; row < userN; row++)
-    {
-        free(cofactorMatrixA[row]);
-    } 
-    free(cofactorMatrixA);
- 
-    return 0;
+	printf("3X3 행렬 입력\n");
+
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size; j++)
+		{
+			printf("[%d][%d] 입력 \n", i, j);
+			scanf("%f", &data);
+			A3[i][j] = data;
+		}
+
+	printf("A행렬 출력\n");
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			printf("%5f", A3[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
 }
- 
-static int
-MultiplicationMatrix(double** matrixA, double** matrixB, double** resultMatrix,
-                        int userN)
+
+float fourbyfour_input_print(float a[][4], int size)
 {
-    int row = 0;
-    int column = 0;
-    int check = 0;
- 
-    for (row = 0; row < userN; row++)
-    {
-        for (column = 0; column < userN; column++)
-        {
-            for (check = 0; check < userN; check++)
-            {
-                resultMatrix[row][column] += matrixA[row][check] *
-                                                matrixB[check][column];
-            } 
-        } 
-    } 
-    return 0;
+	printf("4X4 행렬 입력\n");
+
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size; j++)
+		{
+			printf("[%d][%d] 입력 \n", i, j);
+			scanf("%f", &data);
+			A4[i][j] = data;
+		}
+
+	printf("A행렬 출력\n");
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			printf("%5f", A4[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
+
+float twobytwo_invers(float a2[][2])
+{
+	float d;
+	int x = 0, y = 0;
+
+	d = A2[0][0] * A2[1][1] - A2[0][1] * A2[1][0];
+
+	if (d == 0) {
+		printf("역행렬이 존재하지 않음!\n");
+
+	}
+	else {
+		printf("A역행렬\n");
+		printf("-----------\n");
+
+		int x = 1;
+		for (int i = 0; i < 2; i++) {
+			y = 1;
+			for (int j = 0; j < 2; j++) {
+				invers_A2[i][j] = a2[y][x] / d;
+				y = y - 1;
+			}
+			x = x - 1;
+		}
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				printf("%f ", invers_A2[i][j]);
+			}
+			printf("\n");
+		}
+	}
+	return 0;
+}
+
+float threebythree_invers(float a3[][3])
+{
+
+	float detera4inant = 0;
+
+	detera4inant = a3[0][0] * a3[1][1] * a3[2][2] - a3[0][0] * a3[1][2] * a3[2][1]
+		+ a3[0][1] * a3[1][2] * a3[2][0] - a3[0][1] * a3[1][0] * a3[2][2]
+		+ a3[0][2] * a3[1][0] * a3[2][1] - a3[0][2] * a3[1][1] * a3[2][0];
+
+	printf("\n\ndetera4inant=%g\n", detera4inant);
+
+	if (detera4inant == 0.0) {
+		printf("\n역행렬이 존재하지 않습니다.\n");
+		return 0;
+	}
+
+	for (int i = 0; i < 3; i += 1) {
+		for (int j = 0; j < 3; j += 1) {
+			invers_A3[i][j] = 1.0 / detera4inant *
+				(a3[(i + 1) % 3][(j + 1) % 3] * a3[(i + 2) % 3][(j + 2) % 3] -
+					a3[(i + 1) % 3][(j + 2) % 3] * a3[(i + 2) % 3][(j + 1) % 3]);
+		}
+
+	}
+
+	printf("\n 3x3 역행렬 출력 : \n\n");
+	for (int i = 0; i < 3; i += 1) {
+		for (int j = 0; j < 3; j += 1) {
+			printf("%10.4f\t", invers_A3[i][j]);
+		}
+		printf("\n");
+	}
+
+	return 0;
+}
+
+float fourbyfour_invers(float a4[][4])
+{
+	float det = 0;
+
+	invers_A4[0][0] =
+		a4[1][1] * a4[2][2] * a4[3][3]
+		- a4[1][1] * a4[2][3] * a4[3][2]
+		- a4[2][1] * a4[1][2] * a4[3][3]
+		+ a4[2][1] * a4[1][3] * a4[3][2]
+		+ a4[3][1] * a4[1][2] * a4[2][3]
+		- a4[3][1] * a4[1][3] * a4[2][2];
+
+	invers_A4[0][1] =
+		-a4[0][1] * a4[2][2] * a4[3][3]
+		+ a4[0][1] * a4[2][3] * a4[3][2]
+		+ a4[2][1] * a4[0][2] * a4[3][3]
+		- a4[2][1] * a4[0][3] * a4[3][2]
+		- a4[3][1] * a4[0][2] * a4[2][3]
+		+ a4[3][1] * a4[0][3] * a4[2][2];
+
+	invers_A4[0][2] =
+		a4[0][1] * a4[1][2] * a4[3][3]
+		- a4[0][1] * a4[1][3] * a4[3][2]
+		- a4[1][1] * a4[0][2] * a4[3][3]
+		+ a4[1][1] * a4[0][3] * a4[3][2]
+		+ a4[3][1] * a4[0][2] * a4[1][3]
+		- a4[3][1] * a4[0][3] * a4[1][2];
+
+	invers_A4[0][3] =
+		-a4[0][1] * a4[1][2] * a4[2][3]
+		+ a4[0][1] * a4[1][3] * a4[2][2]
+		+ a4[1][1] * a4[0][2] * a4[2][3]
+		- a4[1][1] * a4[0][3] * a4[2][2]
+		- a4[2][1] * a4[0][2] * a4[1][3]
+		+ a4[2][1] * a4[0][3] * a4[1][2];
+
+	invers_A4[1][0] =
+		-a4[1][0] * a4[2][2] * a4[3][3]
+		+ a4[1][0] * a4[2][3] * a4[3][2]
+		+ a4[2][0] * a4[1][2] * a4[3][3]
+		- a4[2][0] * a4[1][3] * a4[3][2]
+		- a4[3][0] * a4[1][2] * a4[2][3]
+		+ a4[3][0] * a4[1][3] * a4[2][2];
+
+	invers_A4[1][1] =
+		a4[0][0] * a4[2][2] * a4[3][3]
+		- a4[0][0] * a4[2][3] * a4[3][2]
+		- a4[2][0] * a4[0][2] * a4[3][3]
+		+ a4[2][0] * a4[0][3] * a4[3][2]
+		+ a4[3][0] * a4[0][2] * a4[2][3]
+		- a4[3][0] * a4[0][3] * a4[2][2];
+
+	invers_A4[1][2] =
+		-a4[0][0] * a4[1][2] * a4[3][3]
+		+ a4[0][0] * a4[1][3] * a4[3][2]
+		+ a4[1][0] * a4[0][2] * a4[3][3]
+		- a4[1][0] * a4[0][3] * a4[3][2]
+		- a4[3][0] * a4[0][2] * a4[1][3]
+		+ a4[3][0] * a4[0][3] * a4[1][2];
+
+	invers_A4[1][3] =
+		a4[0][0] * a4[1][2] * a4[2][3]
+		- a4[0][0] * a4[1][3] * a4[2][2]
+		- a4[1][0] * a4[0][2] * a4[2][3]
+		+ a4[1][0] * a4[0][3] * a4[2][2]
+		+ a4[2][0] * a4[0][2] * a4[1][3]
+		- a4[2][0] * a4[0][3] * a4[1][2];
+
+	invers_A4[2][0] =
+		a4[1][0] * a4[2][1] * a4[3][3]
+		- a4[1][0] * a4[2][3] * a4[3][1]
+		- a4[2][0] * a4[1][1] * a4[3][3]
+		+ a4[2][0] * a4[1][3] * a4[3][1]
+		+ a4[3][0] * a4[1][1] * a4[2][3]
+		- a4[3][0] * a4[1][3] * a4[2][1];
+
+	invers_A4[2][1] =
+		-a4[0][0] * a4[2][1] * a4[3][3]
+		+ a4[0][0] * a4[2][3] * a4[3][1]
+		+ a4[2][0] * a4[0][1] * a4[3][3]
+		- a4[2][0] * a4[0][3] * a4[3][1]
+		- a4[3][0] * a4[0][1] * a4[2][3]
+		+ a4[3][0] * a4[0][3] * a4[2][1];
+
+	invers_A4[2][2] =
+		a4[0][0] * a4[1][1] * a4[3][3]
+		- a4[0][0] * a4[1][3] * a4[3][1]
+		- a4[1][0] * a4[0][1] * a4[3][3]
+		+ a4[1][0] * a4[0][3] * a4[3][1]
+		+ a4[3][0] * a4[0][1] * a4[1][3]
+		- a4[3][0] * a4[0][3] * a4[1][1];
+
+	invers_A4[2][3] =
+		-a4[0][0] * a4[1][1] * a4[2][3]
+		+ a4[0][0] * a4[1][3] * a4[2][1]
+		+ a4[1][0] * a4[0][1] * a4[2][3]
+		- a4[1][0] * a4[0][3] * a4[2][1]
+		- a4[2][0] * a4[0][1] * a4[1][3]
+		+ a4[2][0] * a4[0][3] * a4[1][1];
+
+	invers_A4[3][0] =
+		-a4[1][0] * a4[2][1] * a4[3][2]
+		+ a4[1][0] * a4[2][2] * a4[3][1]
+		+ a4[2][0] * a4[1][1] * a4[3][2]
+		- a4[2][0] * a4[1][2] * a4[3][1]
+		- a4[3][0] * a4[1][1] * a4[2][2]
+		+ a4[3][0] * a4[1][2] * a4[2][1];
+
+	invers_A4[3][1] =
+		a4[0][0] * a4[2][1] * a4[3][2]
+		- a4[0][0] * a4[2][2] * a4[3][1]
+		- a4[2][0] * a4[0][1] * a4[3][2]
+		+ a4[2][0] * a4[0][2] * a4[3][1]
+		+ a4[3][0] * a4[0][1] * a4[2][2]
+		- a4[3][0] * a4[0][2] * a4[2][1];
+
+	invers_A4[3][2] =
+		-a4[0][0] * a4[1][1] * a4[3][2]
+		+ a4[0][0] * a4[1][2] * a4[3][1]
+		+ a4[1][0] * a4[0][1] * a4[3][2]
+		- a4[1][0] * a4[0][2] * a4[3][1]
+		- a4[3][0] * a4[0][1] * a4[1][2]
+		+ a4[3][0] * a4[0][2] * a4[1][1];
+
+	invers_A4[3][3] =
+		a4[0][0] * a4[1][1] * a4[2][2]
+		- a4[0][0] * a4[1][2] * a4[2][1]
+		- a4[1][0] * a4[0][1] * a4[2][2]
+		+ a4[1][0] * a4[0][2] * a4[2][1]
+		+ a4[2][0] * a4[0][1] * a4[1][2]
+		- a4[2][0] * a4[0][2] * a4[1][1];
+
+	det = a4[0][0] * invers_A4[0][0] + a4[0][1] * invers_A4[1][0] + a4[0][2] * invers_A4[2][0] + a4[0][3] * invers_A4[3][0];
+
+	if (det == 0)
+		return 0;
+
+	det = 1.0 / det;
+
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			A4[i][j] = invers_A4[i][j] * det;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			printf("%10.4f", A4[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
 }
